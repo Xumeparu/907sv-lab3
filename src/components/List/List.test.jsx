@@ -17,16 +17,16 @@ const list = [
 
 test('Корректное отображение пустого списка', () => {
   const list = [];
-  const deleteHandler = jest.fn();
+  const dispatch = jest.fn();
 
-  render(<List list={list} deleteHandler={deleteHandler} />);
+  render(<List list={list} dispatch={dispatch} />);
   expect(screen.getByText('Список пуст')).toBeInTheDocument();
 });
 
 test('Корректное отображение списка элементов', () => {
-  const deleteHandler = jest.fn();
+  const dispatch = jest.fn();
 
-  render(<List list={list} deleteHandler={deleteHandler} />);
+  render(<List list={list} dispatch={dispatch} />);
 
   for (let item of list) {
     expect(screen.getByText(item.title)).toBeInTheDocument();
@@ -35,7 +35,7 @@ test('Корректное отображение списка элементо�
   for (let deleteButton of screen.getAllByTestId('deleteButton')) {
     fireEvent.click(deleteButton);
   }
-  expect(deleteHandler).toBeCalledTimes(list.length);
+  expect(dispatch).toBeCalledTimes(list.length);
 });
 
 test('Отображение чекбоксов в нужном состоянии', () => {
@@ -48,13 +48,13 @@ test('Отображение чекбоксов в нужном состояни
 });
 
 test('Вызов checkHandler с нужными параметрами при клике на чекбокс', () => {
-  const checkedHandler = jest.fn();
+  const dispatch = jest.fn();
 
-  render(<List list={list} checkedHandler={checkedHandler} />);
+  render(<List list={list} dispatch={dispatch} />);
 
   const checkboxes = screen.getAllByTestId('checkbox');
   for (let i = 0; i < checkboxes; i++) {
     fireEvent.click(checkboxes[i]);
-    expect(checkedHandler).toBeCalledWith(list[i].id, !list[i].isChecked);
+    expect(dispatch).toBeCalledWith(list[i].id, !list[i].isChecked);
   }
 });

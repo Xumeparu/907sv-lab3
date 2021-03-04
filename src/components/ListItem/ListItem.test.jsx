@@ -1,15 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ListItem from './ListItem';
 import React from 'react';
+import { ACTION_TYPES } from '../../store';
 
-const id = 19;
+const id = '19';
 const title = 'Покормить цветы';
 
 test('Отображение элемента в списке, реакция на кнопку', () => {
-  const deleteHandler = jest.fn();
+  const dispatch = jest.fn();
 
   // arrange
-  render(<ListItem id={id} title={title} deleteHandler={deleteHandler} />);
+  render(<ListItem id={id} title={title} dispatch={dispatch} />);
   expect(screen.getByText(title)).toBeInTheDocument();
 
   // act
@@ -18,7 +19,7 @@ test('Отображение элемента в списке, реакция н
   fireEvent.click(deleteButton);
 
   // asset
-  expect(deleteHandler).toBeCalledWith(id);
+  expect(dispatch).toBeCalledWith({ payload: id, type: ACTION_TYPES.REMOVE });
 });
 
 test('Отображение выбранного чекбокса', () => {
@@ -36,13 +37,13 @@ test('Отображение пустого чекбокса', () => {
 });
 
 test('При клике на чекбокс вызывается нужный метод', () => {
-  const checkedHandler = jest.fn();
+  const dispatch = jest.fn();
 
-  render(<ListItem id={id} title={title} isChecked={false} checkedHandler={checkedHandler} />);
+  render(<ListItem id={id} title={title} isChecked={false} dispatch={dispatch} />);
   const checkbox = screen.getByTestId('checkbox');
   expect(checkbox).toBeInTheDocument();
 
-  expect(checkedHandler).not.toBeCalled();
+  expect(dispatch).not.toBeCalled();
   fireEvent.click(checkbox);
-  expect(checkedHandler).toBeCalledWith(id, true);
+  expect(dispatch).toBeCalledWith({ payload: id, type: ACTION_TYPES.CHECKED });
 });
