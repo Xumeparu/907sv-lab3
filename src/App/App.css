@@ -9,6 +9,12 @@ h1, h2 {
     color: #63754b;
 }
 
+.errorMessage {
+    color: #ec4949;
+
+    margin-left: 1%;
+}
+
 button {
     border-style: none;
     background-color: #63754b;
