@@ -67,6 +67,7 @@ test('Отображение поля редактирования и возмо
   fireEvent.click(saveButton);
   expect(input).not.toBeInTheDocument();
   expect(screen.queryByTestId('saveButton')).toBeNull();
+  expect(screen.queryByTestId('editButton')).not.toBeNull();
 
   expect(dispatch).toBeCalledWith({ type: ACTION_TYPES.EDIT, payload: { id, title: value } });
 });
