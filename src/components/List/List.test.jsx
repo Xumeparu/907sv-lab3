@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import List from './List';
 import React from 'react';
+import { ACTION_TYPES } from '../../store';
 
 const list = [
   {
@@ -17,9 +18,7 @@ const list = [
 
 test('Корректное отображение пустого списка', () => {
   const list = [];
-  const dispatch = jest.fn();
-
-  render(<List list={list} dispatch={dispatch} />);
+  render(<List list={list} />);
   expect(screen.getByText('Список пуст')).toBeInTheDocument();
 });
 
@@ -55,6 +54,6 @@ test('Вызов checkHandler с нужными параметрами при к
   const checkboxes = screen.getAllByTestId('checkbox');
   for (let i = 0; i < checkboxes; i++) {
     fireEvent.click(checkboxes[i]);
-    expect(dispatch).toBeCalledWith(list[i].id, !list[i].isChecked);
+    expect(dispatch).toBeCalledWith({ type: ACTION_TYPES.CHECKED, payload: list[i].id });
   }
 });

@@ -37,11 +37,11 @@ button {
     color: #d6d6d6;
 }
 
-.deleteBtn {
-    height: 25px;
-    width: 25px;
+.deleteBtn, .editBtn, .saveBtn {
+    height: 30px;
+    width: 30px;
 
-    margin-left: 1%;
+    margin: 1%;
 }
 
 input {

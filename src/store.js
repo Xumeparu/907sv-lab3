@@ -1,7 +1,13 @@
 export const ACTION_TYPES = {
   ADD: 'add',
   REMOVE: 'remove',
-  CHECKED: 'checked'
+  CHECKED: 'checked',
+  EDIT: 'edit'
+};
+
+export const initialList = {
+  list: [],
+  isDoneFilter: false
 };
 
 export default function reducer(action, prevList = []) {
@@ -27,5 +33,23 @@ export default function reducer(action, prevList = []) {
         })
       ];
     }
+    case ACTION_TYPES.EDIT: {
+      return [
+        ...prevList.map(function (item) {
+          if (item.id === action.payload.id) {
+            return { ...item, title: action.payload.title };
+          }
+          return item;
+        })
+      ];
+    }
+    default:
+      return [...prevList];
   }
+}
+
+export function selectFilteredList({ list, isDone }) {
+  if (!isDone) return list;
+
+  return list.filter(item => item.isChecked);
 }
