@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 
-export default function Form({ handleSubmit }) {
+type HandleSubmit = {
+  handleSubmit: (value: string) => void;
+}
+
+export default function Form({ handleSubmit }: HandleSubmit) {
   const [value, setValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  function innerSubmit(e) {
+  function innerSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (value === '') {
@@ -16,7 +20,7 @@ export default function Form({ handleSubmit }) {
     setValue('');
   }
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const newValue = e.target.value;
     setValue(newValue);
   }

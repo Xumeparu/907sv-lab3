@@ -1,7 +1,10 @@
 import React from 'react';
 import ListItem from '../ListItem/ListItem';
+import { IAction, IItem } from '../../store';
 
-export default function List({ list, dispatch }) {
+type ListProps = { list: IItem[]; dispatch: (action: IAction) => void };
+
+export default function List({ list, dispatch }: ListProps) {
   if (list.length === 0) {
     return <div>Список пуст</div>;
   }

@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './App.css';
 import Form from '../components/Form/Form';
 import List from '../components/List/List';
-import reducer, { ACTION_TYPES, selectFilteredList } from '../store';
+import reducer, { ACTION_TYPES, IAction, IItem, selectFilteredList } from '../store';
 
 export default function App() {
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<IItem[]>([]);
   const [isDone, setIsDone] = useState(false);
 
-  function dispatch(action) {
+  function dispatch(action: IAction) {
     const newList = reducer(action, list);
     setList(newList);
   }

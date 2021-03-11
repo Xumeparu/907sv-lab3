@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
-import { ACTION_TYPES } from '../../store';
+import { IAction, ACTION_TYPES } from '../../store';
 
-export default function ListItem({ id, title, isChecked, dispatch }) {
+type ListItemProps = {
+  id: string;
+  title: string;
+  isChecked: boolean;
+  dispatch: (action: IAction) => void;
+};
+
+export default function ListItem({ id, title, isChecked, dispatch }: ListItemProps) {
   const [editMode, setEditMode] = useState(false);
   const [editInput, setEditInput] = useState(title);
 
