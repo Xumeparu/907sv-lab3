@@ -2,7 +2,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 
 type HandleSubmit = {
   handleSubmit: (value: string) => void;
-}
+};
 
 export default function Form({ handleSubmit }: HandleSubmit) {
   const [value, setValue] = useState('');

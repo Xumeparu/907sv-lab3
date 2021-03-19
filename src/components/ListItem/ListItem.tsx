@@ -36,12 +36,10 @@ export default function ListItem({ id, title, isChecked, dispatch }: ListItemPro
       {!editMode && (
         <>
           <span data-testid="title">{title}</span>
+          <button className="editBtn" data-testid="editButton" onClick={() => setEditMode(true)}>
+            &#128397;
+          </button>
         </>
-      )}
-      {!editMode && (
-        <button className="editBtn" data-testid="editButton" onClick={() => setEditMode(true)}>
-          &#128397;
-        </button>
       )}
       {editMode && (
         <>

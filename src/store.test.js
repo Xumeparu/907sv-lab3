@@ -1,6 +1,12 @@
-import reducer, { ACTION_TYPES, selectFilteredList } from './store';
+import reducer, {
+  ACTION_TYPES,
+  initialState,
+  SELECT_FILTER_TYPES,
+  selectFilteredList
+} from './store';
 
 const title = 'Покормить цветы';
+const state = initialState;
 
 describe('Проверка функционирования store.js', () => {
   test('Проверка добавления элемента (ACTION_TYPES.ADD)', () => {
@@ -9,28 +15,29 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    const newList = reducer(action, []);
+    const newState = reducer(action, state);
 
-    expect(newList.length).toEqual(1);
-    expect(newList[0]).toHaveProperty('id');
-    expect(newList[0].title).toEqual(title);
+    expect(newState.length).toEqual(1);
+    expect(newState[0]).toHaveProperty('id');
+    expect(newState[0].title).toEqual(title);
   });
 
   test('Проверка удаления элемента (ACTION_TYPES.REMOVE)', () => {
     const addAction = {
       type: ACTION_TYPES.ADD,
+
       payload: title
     };
 
-    let list = reducer(addAction, []);
+    let state = reducer(addAction, initialState);
 
     const removeAction = {
       type: ACTION_TYPES.REMOVE,
-      payload: list[0].id
+      payload: state[0].id
     };
 
-    list = reducer(removeAction, list);
-    expect(list.length).toEqual(0);
+    state = reducer(removeAction, state);
+    expect(state.length).toEqual(0);
   });
 
   test('Проверка изменения элемента (ACTION_TYPES.CHECKED)', () => {
@@ -39,15 +46,15 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let list = reducer(addAction, []);
+    let state = reducer(addAction, initialState);
 
     const checkedAction = {
       type: ACTION_TYPES.CHECKED,
-      payload: list[0].id
+      payload: state[0].id
     };
 
-    list = reducer(checkedAction, list);
-    expect(list[0].isChecked).toBeTruthy();
+    state = reducer(checkedAction, state);
+    expect(state[0].isChecked).toBeTruthy();
   });
 
   test('Проверка отображения выбранного элемента элемента (ACTION_TYPES.EDIT)', () => {
@@ -58,15 +65,15 @@ describe('Проверка функционирования store.js', () => {
       payload: title
     };
 
-    let list = reducer(addAction, []);
+    let state = reducer(addAction, initialState);
 
     const editAction = {
       type: ACTION_TYPES.EDIT,
-      payload: { id: list[0].id, title: newTitle }
+      payload: { id: state[0].id, title: newTitle }
     };
 
-    list = reducer(editAction, list);
-    expect(list[0].title).toEqual(newTitle);
+    state = reducer(editAction, state);
+    expect(state[0].title).toEqual(newTitle);
   });
 
   test('Проверка фильтрации списка', () => {
@@ -74,17 +81,27 @@ describe('Проверка функционирования store.js', () => {
       type: ACTION_TYPES.ADD,
       payload: 'Покормить цветы'
     };
-    let list = reducer(addAction, []);
-    list = reducer(addAction, list);
+    let state = reducer(addAction, initialState);
+    state = reducer(addAction, state);
 
     const checkedAction = {
       type: ACTION_TYPES.CHECKED,
-      payload: list[1].id
+      payload: state[1].id
     };
-    list = reducer(checkedAction, list);
+    state = reducer(checkedAction, state);
 
-    const filteredList = selectFilteredList({ list: list, isDone: true });
+    const filteredList = selectFilteredList({ state });
     expect(filteredList.length).toEqual(1);
-    expect(filteredList[0].id).toEqual(list[1].id);
+    expect(filteredList[0].id).toEqual(state[1].id);
+  });
+
+  test('Проверка изменения фильтра элемента (ACTION_TYPES.SELECT_FILTER)', () => {
+    const action = {
+      type: ACTION_TYPES.SELECT_FILTER,
+      payload: SELECT_FILTER_TYPES.DONE
+    };
+
+    let state = reducer(action, initialState);
+    expect(state.filter).toEqual(SELECT_FILTER_TYPES.DONE);
   });
 });

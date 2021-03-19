@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import './App.css';
 import Form from '../components/Form/Form';
 import List from '../components/List/List';
-import reducer, { ACTION_TYPES, IAction, IItem, selectFilteredList } from '../store';
+import reducer, {
+  ACTION_TYPES,
+  IAction,
+  initialState,
+  selectFilteredList,
+  StateType
+} from '../store';
+import SelectFilter from '../components/SelectFilter/SelectFilter';
 
 export default function App() {
-  const [list, setList] = useState<IItem[]>([]);
-  const [isDone, setIsDone] = useState(false);
+  const [state, setState] = useState<StateType>(initialState);
 
   function dispatch(action: IAction) {
-    const newList = reducer(action, list);
-    setList(newList);
+    const newList = reducer(action, state);
+    setState(newList);
   }
 
   return (
@@ -28,12 +34,9 @@ export default function App() {
         }
       />
       <div>
-        <label>
-          Только выполненные
-          <input type="checkbox" checked={isDone} onChange={() => setIsDone(!isDone)} />
-        </label>
+        <SelectFilter dispatch={dispatch} />
       </div>
-      <List list={selectFilteredList({ list, isDone })} dispatch={dispatch} />
+      <List list={selectFilteredList(state)} dispatch={dispatch} />
     </div>
   );
 }

@@ -59,6 +59,16 @@ input {
     outline-style: none;
 }
 
+.selectFilter {
+    background-color: #63754b;
+    color: #ffffff;
+
+    height: 30px;
+    width: 150px;
+
+    outline-style: none;
+}
+
 ul {
     list-style: none;
 }
