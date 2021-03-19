@@ -17,9 +17,9 @@ describe('Проверка функционирования store.js', () => {
 
     const newState = reducer(action, state);
 
-    expect(newState.length).toEqual(1);
-    expect(newState[0]).toHaveProperty('id');
-    expect(newState[0].title).toEqual(title);
+    expect(newState.list.length).toEqual(1);
+    expect(newState.list[0]).toHaveProperty('id');
+    expect(newState.list[0].title).toEqual(title);
   });
 
   test('Проверка удаления элемента (ACTION_TYPES.REMOVE)', () => {
@@ -33,11 +33,11 @@ describe('Проверка функционирования store.js', () => {
 
     const removeAction = {
       type: ACTION_TYPES.REMOVE,
-      payload: state[0].id
+      payload: state.list[0].id
     };
 
     state = reducer(removeAction, state);
-    expect(state.length).toEqual(0);
+    expect(state.list.length).toEqual(0);
   });
 
   test('Проверка изменения элемента (ACTION_TYPES.CHECKED)', () => {
@@ -50,11 +50,11 @@ describe('Проверка функционирования store.js', () => {
 
     const checkedAction = {
       type: ACTION_TYPES.CHECKED,
-      payload: state[0].id
+      payload: state.list[0].id
     };
 
     state = reducer(checkedAction, state);
-    expect(state[0].isChecked).toBeTruthy();
+    expect(state.list[0].isChecked).toBeTruthy();
   });
 
   test('Проверка отображения выбранного элемента элемента (ACTION_TYPES.EDIT)', () => {
@@ -69,11 +69,11 @@ describe('Проверка функционирования store.js', () => {
 
     const editAction = {
       type: ACTION_TYPES.EDIT,
-      payload: { id: state[0].id, title: newTitle }
+      payload: { id: state.list[0].id, title: newTitle }
     };
 
     state = reducer(editAction, state);
-    expect(state[0].title).toEqual(newTitle);
+    expect(state.list[0].title).toEqual(newTitle);
   });
 
   test('Проверка фильтрации списка', () => {
@@ -86,13 +86,13 @@ describe('Проверка функционирования store.js', () => {
 
     const checkedAction = {
       type: ACTION_TYPES.CHECKED,
-      payload: state[1].id
+      payload: state.list[1].id
     };
     state = reducer(checkedAction, state);
 
-    const filteredList = selectFilteredList({ state });
-    expect(filteredList.length).toEqual(1);
-    expect(filteredList[0].id).toEqual(state[1].id);
+    const filteredList = selectFilteredList(state);
+    expect(filteredList.length).toEqual(2);
+    expect(filteredList[1].id).toEqual(state.list[1].id);
   });
 
   test('Проверка изменения фильтра элемента (ACTION_TYPES.SELECT_FILTER)', () => {
