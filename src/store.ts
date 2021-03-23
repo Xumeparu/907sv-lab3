@@ -9,7 +9,8 @@ export const ACTION_TYPES = {
   REMOVE: 'remove',
   CHECKED: 'checked',
   EDIT: 'edit',
-  SELECT_FILTER: 'selectFilter'
+  SELECT_BY_FILTER: 'selectByFilter',
+  SELECT_BY_SEARCH_STRING: 'selectBySearchString'
 } as const;
 
 export type ACTION_TYPE =
@@ -17,14 +18,16 @@ export type ACTION_TYPE =
   | typeof ACTION_TYPES.EDIT
   | typeof ACTION_TYPES.REMOVE
   | typeof ACTION_TYPES.CHECKED
-  | typeof ACTION_TYPES.SELECT_FILTER;
+  | typeof ACTION_TYPES.SELECT_BY_FILTER
+  | typeof ACTION_TYPES.SELECT_BY_SEARCH_STRING;
 
 export type IAction =
   | IActionAdd
   | IActionRemove
   | IActionChecked
   | IActionEdit
-  | IActionSelectFilter;
+  | IActionSelectByFilter
+  | IActionSelectBySearchString;
 
 export const SELECT_FILTER_TYPES = {
   ALL: 'Все',
@@ -60,19 +63,26 @@ export interface IActionEdit {
   };
 }
 
-export interface IActionSelectFilter {
-  type: typeof ACTION_TYPES.SELECT_FILTER;
+export interface IActionSelectByFilter {
+  type: typeof ACTION_TYPES.SELECT_BY_FILTER;
   payload: SELECT_FILTER_TYPE;
 }
 
-export const initialState = {
-  list: [],
-  filter: SELECT_FILTER_TYPES.ALL
-};
+export interface IActionSelectBySearchString {
+  type: typeof ACTION_TYPES.SELECT_BY_SEARCH_STRING;
+  payload: string;
+}
 
 export type StateType = {
   list: IItem[];
   filter: SELECT_FILTER_TYPE;
+  substring: string;
+};
+
+export const initialState = {
+  list: [],
+  filter: SELECT_FILTER_TYPES.ALL,
+  substring: ''
 };
 
 export default function reducer(action: IAction, state: StateType = initialState): StateType {
@@ -114,18 +124,28 @@ export default function reducer(action: IAction, state: StateType = initialState
         ]
       };
     }
-    case ACTION_TYPES.SELECT_FILTER: {
+    case ACTION_TYPES.SELECT_BY_FILTER: {
       return { ...state, filter: action.payload };
+    }
+    case ACTION_TYPES.SELECT_BY_SEARCH_STRING: {
+      return { ...state, substring: action.payload };
     }
     default:
       return state;
   }
 }
 
-export function selectFilteredList(state: StateType) {
-  if (state.filter === SELECT_FILTER_TYPES.DONE)
-    return state.list.filter(item => item.isChecked);
-  if (state.filter === SELECT_FILTER_TYPES.NOT_DONE)
-    return state.list.filter(item => !item.isChecked);
-  return state.list;
+export function selectByFilter(list: IItem[], filter: SELECT_FILTER_TYPE) {
+  if (filter === SELECT_FILTER_TYPES.DONE) return list.filter(item => item.isChecked);
+  if (filter === SELECT_FILTER_TYPES.NOT_DONE) return list.filter(item => !item.isChecked);
+  return list;
+}
+
+export function selectBySearchString(list: IItem[], substring: string) {
+  if (substring === '') return list;
+  return list.filter(item => item.title.toLowerCase().indexOf(substring.toLowerCase()) != -1);
+}
+
+export function selectFilteredList(state: StateType): IItem[] {
+  return selectByFilter(selectBySearchString(state.list, state.substring), state.filter);
 }

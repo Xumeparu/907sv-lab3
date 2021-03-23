@@ -1,9 +1,4 @@
-import reducer, {
-  ACTION_TYPES,
-  initialState,
-  SELECT_FILTER_TYPES,
-  selectFilteredList
-} from './store';
+import reducer, { ACTION_TYPES, initialState, SELECT_FILTER_TYPES, selectByFilter } from './store';
 
 const title = 'Покормить цветы';
 const state = initialState;
@@ -90,14 +85,14 @@ describe('Проверка функционирования store.js', () => {
     };
     state = reducer(checkedAction, state);
 
-    const filteredList = selectFilteredList(state);
+    const filteredList = selectByFilter(state);
     expect(filteredList.length).toEqual(2);
     expect(filteredList[1].id).toEqual(state.list[1].id);
   });
 
   test('Проверка изменения фильтра элемента (ACTION_TYPES.SELECT_FILTER)', () => {
     const action = {
-      type: ACTION_TYPES.SELECT_FILTER,
+      type: ACTION_TYPES.SELECT_BY_FILTER,
       payload: SELECT_FILTER_TYPES.DONE
     };
 

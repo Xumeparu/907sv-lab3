@@ -2,14 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import Form from '../components/Form/Form';
 import List from '../components/List/List';
-import reducer, {
-  ACTION_TYPES,
-  IAction,
-  initialState,
-  selectFilteredList,
-  StateType
-} from '../store';
-import SelectFilter from '../components/SelectFilter/SelectFilter';
+import reducer, { ACTION_TYPES, IAction, initialState, selectByFilter, StateType } from '../store';
+import Selector from '../components/SelectFilter/Selector';
 
 export default function App() {
   const [state, setState] = useState<StateType>(initialState);
@@ -34,9 +28,9 @@ export default function App() {
         }
       />
       <div>
-        <SelectFilter dispatch={dispatch} />
+        <Selector dispatch={dispatch} substring={state.substring} />
       </div>
-      <List list={selectFilteredList(state)} dispatch={dispatch} />
+      <List state={state} dispatch={dispatch} />
     </div>
   );
 }
