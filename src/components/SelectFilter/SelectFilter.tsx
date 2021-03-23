@@ -14,7 +14,7 @@ export default function SelectFilter({ dispatch }: SelectFilterProps) {
   return (
     <select className="selectFilter" data-testid="selector" onChange={filterHandler}>
       {Object.keys(SELECT_FILTER_TYPES).map((item, index) => (
-        <option data-testid={index} key={index} value={Object.values(SELECT_FILTER_TYPES)[index]}>
+        <option data-testid="option" key={index} value={Object.values(SELECT_FILTER_TYPES)[index]}>
           {Object.values(SELECT_FILTER_TYPES)[index]}
         </option>
       ))}
